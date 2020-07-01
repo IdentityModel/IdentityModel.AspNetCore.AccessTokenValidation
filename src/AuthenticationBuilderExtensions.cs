@@ -6,17 +6,16 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IdentityModelAspNetCoreAccessTokenValidationAuthenticationBuilderExtensions
     {
-        public static void AddAccessToken(this AuthenticationBuilder builder, string scheme, Action<AccessTokenAuthenticationOptions> options)
+        public static void AddAccessToken(this AuthenticationBuilder builder, string scheme, Action<AccessTokenAuthenticationOptions> options = null)
         {
+            builder.AddScheme<NopAuthenticationOptions, NopAuthenticationHandler>("nop", o => { });
+            
             builder.AddPolicyScheme(scheme, scheme, policySchemeOptions =>
             {
-                AccessTokenAuthenticationOptions atOptions = new AccessTokenAuthenticationOptions();
-                options(atOptions);
-                
-                policySchemeOptions.ForwardDefaultSelector = context =>
-                {
-                    return atOptions.SchemeSelector(context);
-                };
+                var atOptions = new AccessTokenAuthenticationOptions();
+                options?.Invoke(atOptions);
+
+                policySchemeOptions.ForwardDefaultSelector = context => atOptions.SchemeSelector(context) ?? "nop";
             });
         }
     }
