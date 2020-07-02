@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using FluentAssertions;
+using IdentityModel.AspNetCore.AccessTokenValidation;
 using Tests.Infrastructure;
 using Xunit;
 
@@ -12,11 +13,29 @@ namespace Tests
     public class DispatchingTests
     {
         [Fact]
-        public async Task no_handlers_and_no_token_should_401()
+        public async Task default_config_and_no_token_should_throw()
         {
             var server = new Server();
             var client = server.CreateClient();
             
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api");
+
+            Func<Task> act = async () => { await client.SendAsync(request); };
+            await act.Should().ThrowAsync<InvalidOperationException>();
+        }
+        
+        [Fact]
+        public async Task nop_handler_and_no_token_should_401()
+        {
+            var server = new Server
+            {
+                AccessTokenOptions = o =>
+                {
+                    o.DefaultScheme = DynamicAuthenticationDefaults.NopScheme;
+                }
+            };
+            
+            var client = server.CreateClient();
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api");
 
             var response = await client.SendAsync(request);
@@ -25,7 +44,7 @@ namespace Tests
         }
         
         [Fact]
-        public async Task no_handlers_default_selector_and_unknown_token_should_401()
+        public async Task default_config_and_unknown_token_should_throw()
         {
             var server = new Server();
             var client = server.CreateClient();
@@ -33,13 +52,12 @@ namespace Tests
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api");
             request.Headers.Authorization = new AuthenticationHeaderValue("unknown", "token");
 
-            var response = await client.SendAsync(request);
-
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            Func<Task> act = async () => { await client.SendAsync(request); };
+            await act.Should().ThrowAsync<InvalidOperationException>();
         }
         
         [Fact]
-        public async Task no_handlers_default_selector_and_JWT_token_should_throw()
+        public async Task default_config_and_known_token_should_throw()
         {
             var server = new Server();
             var client = server.CreateClient();
@@ -59,8 +77,7 @@ namespace Tests
                 AddTestHandler = true, 
                 AccessTokenOptions = o => { o.SchemeSelector = context => "test"; }
             };
-
-
+            
             var client = server.CreateClient();
             
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api");

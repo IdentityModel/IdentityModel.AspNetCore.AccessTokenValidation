@@ -14,12 +14,11 @@ namespace Tests.Infrastructure
 {
     public class Server
     {
-        public Action<AccessTokenAuthenticationOptions> AccessTokenOptions { get; set; }
+        public Action<DynamicAccessTokenAuthenticationOptions> AccessTokenOptions { get; set; }
         public bool AddTestHandler { get; set; }
         
         public TestServer CreateServer()
         {
-            
             return new TestServer(new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
