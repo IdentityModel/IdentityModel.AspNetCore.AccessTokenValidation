@@ -17,7 +17,7 @@ namespace IdentityModel.AspNetCore.AccessTokenValidation
     {
         public Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
         {
-            return Task.FromResult(ScopeConverter.SplitScopeString(principal));
+            return Task.FromResult(ScopeConverter.SplitScopeClaims(principal));
         }
     }
 }

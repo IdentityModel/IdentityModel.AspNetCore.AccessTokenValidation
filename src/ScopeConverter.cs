@@ -6,7 +6,7 @@ namespace IdentityModel.AspNetCore.AccessTokenValidation
 {
     public static class ScopeConverter
     {
-        public static ClaimsPrincipal SplitScopeString(ClaimsPrincipal principal)
+        public static ClaimsPrincipal SplitScopeClaims(ClaimsPrincipal principal)
         {
             var identities = new List<ClaimsIdentity>();
 
@@ -26,6 +26,10 @@ namespace IdentityModel.AspNetCore.AccessTokenValidation
                             {
                                 identity.AddClaim(new Claim("scope", scope, claim.ValueType, claim.Issuer));
                             }
+                        }
+                        else
+                        {
+                            identity.AddClaim(claim);
                         }
                     }
                     else
