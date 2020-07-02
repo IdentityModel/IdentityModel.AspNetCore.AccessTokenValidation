@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IdentityModelAspNetCoreAccessTokenValidationAuthenticationBuilderExtensions
     {
-        public static void AddAccessToken(this AuthenticationBuilder builder, string scheme, Action<AccessTokenAuthenticationOptions> options = null)
+        public static AuthenticationBuilder AddAccessToken(this AuthenticationBuilder builder, string scheme, Action<AccessTokenAuthenticationOptions> options = null)
         {
             builder.AddScheme<NopAuthenticationOptions, NopAuthenticationHandler>("nop", o => { });
             
@@ -17,6 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 policySchemeOptions.ForwardDefaultSelector = context => atOptions.SchemeSelector(context) ?? "nop";
             });
+
+            return builder;
         }
     }
 }
