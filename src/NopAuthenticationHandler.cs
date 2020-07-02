@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace IdentityModel.AspNetCore.AccessTokenValidation
 {
     public class NopAuthenticationOptions : AuthenticationSchemeOptions
     { }

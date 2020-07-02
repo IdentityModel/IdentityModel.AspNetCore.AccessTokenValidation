@@ -1,5 +1,5 @@
 using System;
-using System.Xml.Serialization;
+using IdentityModel.AspNetCore.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication;
 
 namespace Microsoft.Extensions.DependencyInjection

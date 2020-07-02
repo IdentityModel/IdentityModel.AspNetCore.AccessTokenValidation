@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
-using System.Net;
 using Microsoft.AspNetCore.Http;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace IdentityModel.AspNetCore.AccessTokenValidation
 {
     public class AccessTokenAuthenticationOptions
     {
