@@ -42,11 +42,6 @@ namespace Tests
         public async Task no_handlers_default_selector_and_JWT_token_should_throw()
         {
             var server = new Server();
-            // server.AccessTokenOptions = o =>
-            // {
-            //     o.SchemeSelector = context => "test";
-            // };
-            
             var client = server.CreateClient();
             
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api");
@@ -59,14 +54,13 @@ namespace Tests
         [Fact]
         public async Task handlers_and_token_should_200()
         {
-            var server = new Server();
-            server.AddTestHandler = true;
-            
-            server.AccessTokenOptions = o =>
+            var server = new Server
             {
-                o.SchemeSelector = context => "test";
+                AddTestHandler = true, 
+                AccessTokenOptions = o => { o.SchemeSelector = context => "test"; }
             };
-            
+
+
             var client = server.CreateClient();
             
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api");

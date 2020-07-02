@@ -15,7 +15,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 var atOptions = new AccessTokenAuthenticationOptions();
                 options?.Invoke(atOptions);
 
-                policySchemeOptions.ForwardDefaultSelector = context => atOptions.SchemeSelector(context) ?? "nop";
+                if (atOptions.SchemeSelector is null)
+                {
+                    policySchemeOptions.ForwardDefaultSelector = context => 
+                        atOptions.DefaultSelector(context, atOptions.DefaultJwtHandlerScheme, atOptions.DefaultIntrospectionHandlerScheme) ?? "nop";
+                }
+                else
+                {
+                    policySchemeOptions.ForwardDefaultSelector = context => 
+                        atOptions.SchemeSelector(context) ?? "nop";
+                }
             });
 
             return builder;
