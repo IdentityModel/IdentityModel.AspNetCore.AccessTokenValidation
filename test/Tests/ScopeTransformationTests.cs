@@ -130,5 +130,27 @@ namespace Tests
             scopes.First().Value.Should().Be("scope1");
             scopes.Last().Value.Should().Be("scope2");
         }
+        
+        [Fact]
+        public void principal_single_identity_with_malformed_scopes_string_should_be_transformed()
+        {
+            var identity = Identity.Create("test",
+                new Claim("sub", "123"),
+                new Claim("scope", " scope1  scope2 "));
+
+            var principal = new ClaimsPrincipal(identity);
+            
+            var transform = ScopeConverter.SplitScopeClaims(principal);
+
+            transform.Identities.Count().Should().Be(1);
+            transform.Identities.First().Claims.Count().Should().Be(3);
+
+            transform.Identities.First().FindFirst("sub").Value.Should().Be("123");
+            
+            var scopes = transform.Identities.First().FindAll("scope").ToList();
+            scopes.Count().Should().Be(2);
+            scopes.First().Value.Should().Be("scope1");
+            scopes.Last().Value.Should().Be("scope2");
+        }
     }
 }

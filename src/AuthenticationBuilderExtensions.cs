@@ -15,6 +15,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 var atOptions = new DynamicAuthenticationHandlerOptions();
                 options?.Invoke(atOptions);
 
+                if (atOptions.SchemeSelector is null)
+                {
+                    throw new ArgumentNullException(nameof(atOptions.SchemeSelector));
+                }
+
                 policySchemeOptions.ForwardDefaultSelector = context =>
                     atOptions?.SchemeSelector(context) ?? atOptions.DefaultScheme;
             });
