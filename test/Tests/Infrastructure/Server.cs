@@ -2,19 +2,16 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.AspNetCore.AccessTokenValidation;
-using IdentityModel.AspNetCore.OAuth2Introspection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Tests.Infrastructure
 {
     public class Server
     {
-        public Action<DynamicAccessTokenAuthenticationOptions> AccessTokenOptions { get; set; }
+        public Action<DynamicAuthenticationHandlerOptions> AccessTokenOptions { get; set; }
         public bool AddTestHandler { get; set; }
         
         public TestServer CreateServer()
@@ -24,7 +21,7 @@ namespace Tests.Infrastructure
                 {
                     var builder = services.AddAuthentication("token");
                     
-                    builder.AddAccessToken("token", AccessTokenOptions);
+                    builder.AddDynamicAuthenticationHandler("token", AccessTokenOptions);
 
                     if (AddTestHandler)
                     {

@@ -31,7 +31,7 @@ namespace Tests
             {
                 AccessTokenOptions = o =>
                 {
-                    o.DefaultScheme = DynamicAuthenticationDefaults.NopScheme;
+                    o.DefaultScheme = DynamicAuthenticationHandlerDefaults.NopScheme;
                 }
             };
             

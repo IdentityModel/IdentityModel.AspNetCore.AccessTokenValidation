@@ -6,13 +6,13 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IdentityModelAspNetCoreAccessTokenValidationAuthenticationBuilderExtensions
     {
-        public static AuthenticationBuilder AddAccessToken(this AuthenticationBuilder builder, string scheme, Action<DynamicAccessTokenAuthenticationOptions> options = null)
+        public static AuthenticationBuilder AddDynamicAuthenticationHandler(this AuthenticationBuilder builder, string scheme, Action<DynamicAuthenticationHandlerOptions> options = null)
         {
-            builder.AddScheme<NopAuthenticationOptions, NopAuthenticationHandler>(DynamicAuthenticationDefaults.NopScheme, o => { });
+            builder.AddScheme<NopAuthenticationOptions, NopAuthenticationHandler>(DynamicAuthenticationHandlerDefaults.NopScheme, o => { });
 
             builder.AddPolicyScheme(scheme, scheme, policySchemeOptions =>
             {
-                var atOptions = new DynamicAccessTokenAuthenticationOptions();
+                var atOptions = new DynamicAuthenticationHandlerOptions();
                 options?.Invoke(atOptions);
 
                 policySchemeOptions.ForwardDefaultSelector = context =>

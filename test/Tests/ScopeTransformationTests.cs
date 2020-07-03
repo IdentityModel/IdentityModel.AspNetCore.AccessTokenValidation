@@ -1,14 +1,8 @@
-using System;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using FluentAssertions;
 using IdentityModel;
 using IdentityModel.AspNetCore.AccessTokenValidation;
-using Tests.Infrastructure;
 using Xunit;
 
 namespace Tests

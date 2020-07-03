@@ -1,6 +1,6 @@
 namespace IdentityModel.AspNetCore.AccessTokenValidation
 {
-    public class DynamicAuthenticationDefaults
+    public class DynamicAuthenticationHandlerDefaults
     {
         public const string JwtBearerDefaultScheme = "Bearer";
         public const string IntrospectionDefaultScheme = "Introspection";
