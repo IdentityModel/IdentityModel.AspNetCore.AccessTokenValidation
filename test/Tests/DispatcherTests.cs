@@ -133,8 +133,6 @@ namespace Tests
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
         
-        
-        
         [Fact]
         public async Task handlers_and_token_should_200()
         {
@@ -152,6 +150,71 @@ namespace Tests
             var response = await client.SendAsync(request);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        
+        [Fact]
+        public async Task Introspection_setup_with_no_token_should_call_bearer_handler()
+        {
+            var server = new Server
+            {
+                AccessTokenOptions = o =>
+                {
+                    o.DefaultScheme = "Bearer";
+                    o.SchemeSelector = JwtAndIntrospectionSelector.Func;
+                }
+            };
+
+            var client = server.CreateClient();
+            
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api");
+
+            Func<Task> act = async () => { await client.SendAsync(request); };
+            act.Should().Throw<InvalidOperationException>()
+                .Where(e => e.Message.StartsWith("No authentication handler is registered for the scheme 'Bearer'"));
+        }
+        
+        [Fact]
+        public async Task Introspection_setup_with_JWT_should_call_bearer_handler()
+        {
+            var server = new Server
+            {
+                AccessTokenOptions = o =>
+                {
+                    o.DefaultScheme = "Bearer";
+                    o.SchemeSelector = JwtAndIntrospectionSelector.Func;
+                }
+            };
+
+            var client = server.CreateClient();
+            
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "header.payload.signature");
+
+            Func<Task> act = async () => { await client.SendAsync(request); };
+            act.Should().Throw<InvalidOperationException>()
+                .Where(e => e.Message.StartsWith("No authentication handler is registered for the scheme 'Bearer'"));
+        }
+        
+        [Fact]
+        public async Task Introspection_setup_with_reference_token_should_call_Introspection_handler()
+        {
+            var server = new Server
+            {
+                AccessTokenOptions = o =>
+                {
+                    o.DefaultScheme = "Bearer";
+                    o.SchemeSelector = JwtAndIntrospectionSelector.Func;
+                }
+            };
+
+            var client = server.CreateClient();
+            
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "reference");
+
+            Func<Task> act = async () => { await client.SendAsync(request); };
+            act.Should().Throw<InvalidOperationException>()
+                .Where(e => e.Message.StartsWith("No authentication handler is registered for the scheme 'Introspection'"));
         }
     }
 }

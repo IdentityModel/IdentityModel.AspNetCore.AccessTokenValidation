@@ -16,7 +16,7 @@ namespace IdentityModel.AspNetCore.AccessTokenValidation
             }
 
             var parts = header.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length != 1)
+            if (parts.Length != 2)
             {
                 return (null, null);
             }
