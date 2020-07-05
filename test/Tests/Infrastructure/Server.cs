@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
 using IdentityModel.AspNetCore.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
@@ -11,22 +12,32 @@ namespace Tests.Infrastructure
 {
     public class Server
     {
-        public Action<DynamicAuthenticationHandlerOptions> AccessTokenOptions { get; set; }
-        public bool AddTestHandler { get; set; }
+        public string ForwardScheme { get; set; }
+        
+        public bool AddForwarder { get; set; }
         
         public TestServer CreateServer()
         {
             return new TestServer(new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    var builder = services.AddAuthentication("token");
-                    
-                    builder.AddDynamicAuthenticationHandler("token", AccessTokenOptions);
-
-                    if (AddTestHandler)
+                    var builder = services.AddAuthentication("test");
+                    builder.AddScheme<TestAuthenticationOptions, TestAuthenticationHandler>("test", o =>
                     {
-                        builder.AddScheme<TestAuthenticationOptions, TestAuthenticationHandler>("test", o => { });
-                    }
+                        if (AddForwarder)
+                        {
+                            if (!string.IsNullOrEmpty(ForwardScheme))
+                            {
+                                o.ForwardDefaultSelector = ReferenceToken.Forward(ForwardScheme);
+                            }
+                            else
+                            {
+                                o.ForwardDefaultSelector = ReferenceToken.Forward();
+                            }
+                        }
+                    });
+                    
+                    
 
                 })
                 .Configure(app =>

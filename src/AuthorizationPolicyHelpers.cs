@@ -3,6 +3,23 @@ using Microsoft.AspNetCore.Authorization;
 namespace IdentityModel.AspNetCore.AccessTokenValidation
 {
     /// <summary>
+    /// Extensions methods for AuthorizationOptions
+    /// </summary>
+    public static class AuthorizationOptionsExtensions
+    {
+        public static AuthorizationOptions AddScopePolicy(this AuthorizationOptions options, string policyName, params string[] scopes)
+        {
+            options.AddPolicy(policyName, p =>
+            {
+                p.RequireAuthenticatedUser();
+                p.RequireScope(scopes);
+            });
+
+            return options;
+        }
+    }
+    
+    /// <summary>
     /// Extensions for creating scope related authorization policies
     /// </summary>
     public static class AuthorizationPolicyBuilderExtensions
@@ -16,24 +33,6 @@ namespace IdentityModel.AspNetCore.AccessTokenValidation
         public static AuthorizationPolicyBuilder RequireScope(this AuthorizationPolicyBuilder builder, params string[] scope)
         {
             return builder.RequireClaim("scope", scope);
-        }
-    }
-
-    /// <summary>
-    /// Helper for creating scope-related policies
-    /// </summary>
-    public static class ScopePolicy
-    {
-        /// <summary>
-        /// Creates a policy to check for required scopes.
-        /// </summary>
-        /// <param name="scopes">List of any required scopes. The token must contain at least one of the listed scopes.</param>
-        /// <returns></returns>
-        public static AuthorizationPolicy Create(params string[] scopes)
-        {
-            return new AuthorizationPolicyBuilder()
-                .RequireScope(scopes)
-                .Build();
         }
     }
 }
