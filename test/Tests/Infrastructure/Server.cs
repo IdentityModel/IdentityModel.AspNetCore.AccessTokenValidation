@@ -28,11 +28,11 @@ namespace Tests.Infrastructure
                         {
                             if (!string.IsNullOrEmpty(ForwardScheme))
                             {
-                                o.ForwardDefaultSelector = ReferenceToken.Forward(ForwardScheme);
+                                o.ForwardDefaultSelector = Selector.ForwardReferenceToken(ForwardScheme);
                             }
                             else
                             {
-                                o.ForwardDefaultSelector = ReferenceToken.Forward();
+                                o.ForwardDefaultSelector = Selector.ForwardReferenceToken();
                             }
                         }
                     });

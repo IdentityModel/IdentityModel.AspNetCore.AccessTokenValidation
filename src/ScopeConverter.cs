@@ -4,9 +4,17 @@ using System.Security.Claims;
 
 namespace IdentityModel.AspNetCore.AccessTokenValidation
 {
+    /// <summary>
+    /// Logic for normalizing scope claims to separate claim types
+    /// </summary>
     public static class ScopeConverter
     {
-        public static ClaimsPrincipal SplitScopeClaims(ClaimsPrincipal principal)
+        /// <summary>
+        /// Logic for normalizing scope claims to separate claim types
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns></returns>
+        public static ClaimsPrincipal NormalizeScopeClaims(this ClaimsPrincipal principal)
         {
             var identities = new List<ClaimsIdentity>();
 

@@ -4,9 +4,17 @@ using Microsoft.AspNetCore.Http;
 
 namespace IdentityModel.AspNetCore.AccessTokenValidation
 {
-    public static class ReferenceToken
+    /// <summary>
+    /// Provides helper functions for forwarding logic
+    /// </summary>
+    public static class Selector
     {
-        public static Func<HttpContext, string> Forward(string introspectionScheme = "Introspection")
+        /// <summary>
+        /// Provides a forwarding func for JWT vs reference tokens (based on existence of dot in token)
+        /// </summary>
+        /// <param name="introspectionScheme">Scheme name of the introspection handler</param>
+        /// <returns></returns>
+        public static Func<HttpContext, string> ForwardReferenceToken(string introspectionScheme = "Introspection")
         {
             string Select(HttpContext context)
             {
@@ -23,7 +31,11 @@ namespace IdentityModel.AspNetCore.AccessTokenValidation
             return Select;
         }
         
-        
+        /// <summary>
+        /// Extracts scheme and credential from Authorization header (if present)
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public static (string, string) GetSchemeAndCredential(HttpContext context)
         {
             var header = context.Request.Headers["Authorization"].FirstOrDefault();

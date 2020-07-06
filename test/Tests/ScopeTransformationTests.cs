@@ -18,7 +18,7 @@ namespace Tests
             
             var principal = new ClaimsPrincipal(identity);
 
-            var transform = ScopeConverter.SplitScopeClaims(principal);
+            var transform = ScopeConverter.NormalizeScopeClaims(principal);
 
             transform.Identities.Count().Should().Be(1);
             transform.Identities.First().Claims.Count().Should().Be(2);
@@ -50,7 +50,7 @@ namespace Tests
             
             var principal = new ClaimsPrincipal(new[] { identity1, identity2 });
 
-            var transform = ScopeConverter.SplitScopeClaims(principal);
+            var transform = ScopeConverter.NormalizeScopeClaims(principal);
 
             transform.Identities.Count().Should().Be(2);
             transform.Identities.First().Claims.Count().Should().Be(2);
@@ -96,7 +96,7 @@ namespace Tests
             
             var principal = new ClaimsPrincipal(identity);
             
-            var transform = ScopeConverter.SplitScopeClaims(principal);
+            var transform = ScopeConverter.NormalizeScopeClaims(principal);
 
             transform.Identities.Count().Should().Be(1);
             transform.Identities.First().Claims.Count().Should().Be(3);
@@ -118,7 +118,7 @@ namespace Tests
 
             var principal = new ClaimsPrincipal(identity);
             
-            var transform = ScopeConverter.SplitScopeClaims(principal);
+            var transform = ScopeConverter.NormalizeScopeClaims(principal);
 
             transform.Identities.Count().Should().Be(1);
             transform.Identities.First().Claims.Count().Should().Be(3);
@@ -140,7 +140,7 @@ namespace Tests
 
             var principal = new ClaimsPrincipal(identity);
             
-            var transform = ScopeConverter.SplitScopeClaims(principal);
+            var transform = ScopeConverter.NormalizeScopeClaims(principal);
 
             transform.Identities.Count().Should().Be(1);
             transform.Identities.First().Claims.Count().Should().Be(3);
