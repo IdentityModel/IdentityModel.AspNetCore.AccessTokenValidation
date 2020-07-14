@@ -14,7 +14,7 @@ namespace IdentityModel.AspNetCore.AccessTokenValidation
         /// </summary>
         /// <param name="introspectionScheme">Scheme name of the introspection handler</param>
         /// <returns></returns>
-        public static Func<HttpContext, string> ForwardReferenceToken(string introspectionScheme = "Introspection")
+        public static Func<HttpContext, string> ForwardReferenceToken(string introspectionScheme = "introspection")
         {
             string Select(HttpContext context)
             {
