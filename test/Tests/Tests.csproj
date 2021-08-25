@@ -15,7 +15,7 @@
         
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
         
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.18" />
         <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="4.0.1" />
     </ItemGroup>
 
